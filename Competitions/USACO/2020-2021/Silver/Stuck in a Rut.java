@@ -59,17 +59,18 @@ public class SilverProblemThree {
                 if (horizontalDistance > verticalDistance) {
                     //Kill east cow
                     eastCow.time = horizontalDistance;
-                    eastCow.stopped += northCow.stopped - 1;
+                    northCow.stopped += eastCow.stopped + 1;
                     continue;
                 }
 
+                eastCow.stopped += northCow.stopped + 1;
                 northCow.time = verticalDistance;
                 break;
             }
         }
         for(Cow cow : order)
         {
-            System.out.println(cow.getTime());
+            System.out.println(cow.stopped);
         }
     }
 
@@ -86,14 +87,6 @@ public class SilverProblemThree {
             xPos = x;
             yPos = y;
             direction = d;
-        }
-
-        public String getTime()
-        {
-            if(time == -1)
-                return "Infinity";
-            else
-                return Integer.toString(time);
         }
     }
 
