@@ -1,12 +1,12 @@
 import java.util.*;
 
-public class SilverProblemTwo {
+public class Main {
 
 
-    public static boolean checkIfBoundThree(Cow cow, int xMax, int xMin, int yMax, int yMin)
+    public static boolean isBoundary(Cow cow, int xMax, int xMin, int yMax, int yMin)
     {
-        int x = cow.xPos;
-        int y = cow.yPos;
+        int x = cow.X;
+        int y = cow.Y;
 
         if(x != xMax && x != xMin && y != yMax && y != yMin)
         {
@@ -15,137 +15,89 @@ public class SilverProblemTwo {
         return true;
     }
 
-    public static boolean checkIfBoth(Cow cow, int xMax, int xMin, int yMax, int yMin)
+    public static void main(String[] args)
     {
-        int x = cow.xPos;
-        int y = cow.yPos;
+        Scanner fin = new Scanner(System.in);
 
-        int counter = 0;
+        int numCows = Integer.parseInt(fin.nextLine());
 
-        if(x == xMax) counter++;
-        if(x == xMin) counter++;
-        if(y == yMax) counter++;
-        if(y == yMin) counter++;
+        Cow[] cowArr = new Cow[numCows];
 
-        if(counter >= 2)
+        for(int i = 0; i < numCows; i++)
         {
-            return true;
-        }
-        return false;
-    }
-
-    public static void SilverProblemTwo(String[] args)
-    {
-        Scanner in = new Scanner(System.in);
-
-        int n = Integer.parseInt(in.nextLine());
-
-        Cow[] cowList = new Cow[n];
-
-        for(int i = 0; i < n; i++)
-        {
-            int x = in.nextInt();
-            int y = in.nextInt();
-            in.nextLine();
+            int x = fin.nextInt();
+            int y = fin.nextInt();
+            fin.nextLine();
 
             Cow tempCow = new Cow(x, y);
 
-            cowList[i] = tempCow;
+            cowArr[i] = tempCow;
         }
 
+        int ans = 0;
 
-        int counter = 0;
-
-        for(int i = 0; i < cowList.length; i++)
+        for(int i = 0; i < numCows; i++)
         {
-            for(int i2 = i + 1; i2 < cowList.length; i2++)
+            for(int i2 = i + 1; i2 < numCows; i2++)
             {
-                for(int i3 = i2 + 1; i3 < cowList.length; i3++)
+                for(int i3 = i2 + 1; i3 < numCows; i3++)
                 {
-                    for(int i4 = i3 + 1; i4 < cowList.length; i4++)
+                    for(int i4 = i3 + 1; i4 < numCows; i4++)
                     {
-                        Cow[] list = new Cow[4];
+                        int xMin = Math.min(cowArr[i].X, Math.min(cowArr[i2].X, Math.min(cowArr[i3].X, cowArr[i4].X)));
+                        int xMax = Math.max(cowArr[i].X, Math.max(cowArr[i2].X, Math.max(cowArr[i3].X, cowArr[i4].X)));
 
-                        list[0] = cowList[i];
-                        list[1] = cowList[i2];
-                        list[2] = cowList[i3];
-                        list[3] = cowList[i4];
+                        int yMin = Math.min(cowArr[i].Y, Math.min(cowArr[i2].Y, Math.min(cowArr[i3].Y, cowArr[i4].Y)));
+                        int yMax = Math.max(cowArr[i].Y, Math.max(cowArr[i2].Y, Math.max(cowArr[i3].Y, cowArr[i4].Y)));
 
-                        int minX = Math.min(list[0].xPos, Math.min(list[1].xPos, Math.min(list[2].xPos, list[3].xPos)));
-                        int maxX = Math.max(list[0].xPos, Math.max(list[1].xPos, Math.max(list[2].xPos, list[3].xPos)));
+                        if (!isBoundary(cowArr[i], xMax, xMin, yMax, yMin)) continue;
+                        if (!isBoundary(cowArr[i2], xMax, xMin, yMax, yMin)) continue;
+                        if (!isBoundary(cowArr[i3], xMax, xMin, yMax, yMin)) continue;
+                        if (!isBoundary(cowArr[i4], xMax, xMin, yMax, yMin)) continue;
 
-                        int minY = Math.min(list[0].yPos, Math.min(list[1].yPos, Math.min(list[2].yPos, list[3].yPos)));
-                        int maxY = Math.max(list[0].yPos, Math.max(list[1].yPos, Math.max(list[2].yPos, list[3].yPos)));
-
-                        if(checkIfBoth(list[0], maxX, minX, maxY, minY))
-                        {
-                            continue;
-                        }
-
-                        if(checkIfBoth(list[1], maxX, minX, maxY, minY))
-                        {
-                            continue;
-                        }
-
-                        if(checkIfBoth(list[2], maxX, minX, maxY, minY))
-                        {
-                            continue;
-                        }
-
-                        if(checkIfBoth(list[3], maxX, minX, maxY, minY))
-                        {
-                            continue;
-                        }
-
-                        counter++;
+                        ans++;
                     }
                 }
             }
         }
 
 
-        for(int i = 0; i < cowList.length; i++)
+        for(int i = 0; i < numCows; i++)
         {
-            for(int i2 = i + 1; i2 < cowList.length; i2++)
+            for(int i2 = i + 1; i2 < numCows; i2++)
             {
-                for(int i3 = i2 + 1; i3 < cowList.length; i3++)
+                for(int i3 = i2 + 1; i3 < numCows; i3++)
                 {
-                    Cow[] list = new Cow[3];
+                    int xMin = Math.min(cowArr[i].X, Math.min(cowArr[i2].X, cowArr[i3].X));
+                    int xMax = Math.max(cowArr[i].X, Math.max(cowArr[i2].X, cowArr[i3].X));
 
-                    list[0] = cowList[i];
-                    list[1] = cowList[i2];
-                    list[2] = cowList[i3];
+                    int yMin = Math.min(cowArr[i].Y, Math.min(cowArr[i2].Y, cowArr[i3].Y));
+                    int yMax = Math.max(cowArr[i].Y, Math.max(cowArr[i2].Y, cowArr[i3].Y));
 
-                    int minX = Math.min(list[0].xPos, Math.min(list[1].xPos, list[2].xPos));
-                    int maxX = Math.max(list[0].xPos, Math.max(list[1].xPos, list[2].xPos));
+                    if (!isBoundary(cowArr[i], xMax, xMin, yMax, yMin)) continue;
+                    if (!isBoundary(cowArr[i2], xMax, xMin, yMax, yMin)) continue;
+                    if (!isBoundary(cowArr[i3], xMax, xMin, yMax, yMin)) continue;
 
-                    int minY = Math.min(list[0].yPos, Math.min(list[1].yPos, list[2].yPos));
-                    int maxY = Math.max(list[0].yPos, Math.max(list[1].yPos, list[2].yPos));
-
-                    if(!checkIfBoundThree(list[0], maxX, minX, maxY, minY)) continue;
-                    if(!checkIfBoundThree(list[1], maxX, minX, maxY, minY)) continue;
-                    if(!checkIfBoundThree(list[2], maxX, minX, maxY, minY)) continue;
-
-                    counter++;
+                    ans++;
                 }
             }
         }
 
-        counter += ((n)*(n - 1)) / 2;
-        counter += n;
+        ans += ((numCows * (numCows - 1)) / 2);
+        ans += numCows;
 
-        System.out.println(counter + 1);
+        System.out.println(ans + 1);
     }
 
     public static class Cow
     {
-        int xPos;
-        int yPos;
+        int X;
+        int Y;
 
         Cow(int x, int y)
         {
-            xPos = x;
-            yPos = y;
+            this.X = x;
+            this.Y = y;
         }
     }
 }
